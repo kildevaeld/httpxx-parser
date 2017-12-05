@@ -10,7 +10,7 @@
 //#include <uv.h>
 #include <vector>
 
-namespace http_request {
+namespace httpxx_parser {
 
 /**
  * @brief Event emitter base class.
@@ -236,4 +236,4 @@ private:
   std::vector<std::unique_ptr<BaseHandler>> handlers{};
 };
 
-} // namespace http_request
+} // namespace httpxx_parser

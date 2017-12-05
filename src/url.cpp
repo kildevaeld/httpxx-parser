@@ -2,7 +2,7 @@
 #include <httpxx-parser/url.hpp>
 #include <ostream>
 
-namespace http_request {
+namespace httpxx_parser {
 
 static inline std::string get_field(http_parser_url *parser,
                                     const std::string &url, int field) {
@@ -16,7 +16,7 @@ static inline std::string get_field(http_parser_url *parser,
 }
 
 URL::URL(const std::string &url) { parse(url); }
-
+URL::URL(const char *url) { parse(url); }
 URL::URL() {}
 URL::~URL() {}
 
@@ -89,4 +89,4 @@ std::ostream &operator<<(std::ostream &os, const URL &u) {
   return os;
 }
 
-} // namespace http_request
+} // namespace httpxx_parser

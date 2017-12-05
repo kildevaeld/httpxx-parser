@@ -3,6 +3,7 @@ set(SOURCES
     header.cpp
     url.cpp
     parser.cpp
+    request.cpp
 
     ${PROJECT_ROOT}/vendor/http-parser/http_parser.c
 )

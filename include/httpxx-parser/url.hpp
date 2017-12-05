@@ -1,11 +1,12 @@
 #pragma once
 #include <string>
-namespace http_request {
+namespace httpxx_parser {
 
 class URL {
 
 public:
   URL(const std::string &url);
+  URL(const char *);
   URL();
   ~URL();
 

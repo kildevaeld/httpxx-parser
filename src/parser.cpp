@@ -3,7 +3,7 @@
 #include <httpxx-parser/parser.hpp>
 #include <string>
 
-namespace http_request {
+namespace httpxx_parser {
 
 namespace internal {
 
@@ -104,4 +104,4 @@ uint16_t Parser::status() const { return d->parser.status_code; }
 
 Parser::State Parser::state() const { return d->state; }
 
-} // namespace http_request
+} // namespace httpxx_parser

@@ -1,6 +1,6 @@
 #include <httpxx-parser/header.hpp>
 
-namespace http_request {
+namespace httpxx_parser {
 
 bool CaseInsensitiveCompare::operator()(const std::string &a,
                                         const std::string &b) const noexcept {
@@ -11,4 +11,4 @@ bool CaseInsensitiveCompare::operator()(const std::string &a,
                                       });
 }
 
-} // namespace http_request
+} // namespace httpxx_parser

@@ -2,7 +2,17 @@
 #include <map>
 #include <string>
 
-namespace http_request {
+namespace httpxx_parser {
+
+enum Method {
+  Get,
+  Post,
+  Put,
+  Patch,
+  Option,
+  Head,
+  Delete,
+};
 
 struct CaseInsensitiveCompare {
   bool operator()(const std::string &a, const std::string &b) const noexcept;
@@ -10,4 +20,4 @@ struct CaseInsensitiveCompare {
 
 using Header = std::map<std::string, std::string, CaseInsensitiveCompare>;
 
-} // namespace http_request
+} // namespace httpxx_parser

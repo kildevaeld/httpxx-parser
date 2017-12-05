@@ -5,7 +5,7 @@
 
 struct http_parser;
 
-namespace http_request {
+namespace httpxx_parser {
 
 namespace internal {
 class ParserPrivate;
@@ -52,4 +52,4 @@ private:
   std::unique_ptr<internal::ParserPrivate> d;
 };
 
-} // namespace http_request
+} // namespace httpxx_parser

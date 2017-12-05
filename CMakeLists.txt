@@ -13,8 +13,6 @@ add_subdirectory(src)
 
 if(HTTPXX_PARSER_BUILD_TESTS)
     add_subdirectory(test)
-    enable_testing()
-    add_test(NAME HttpxxParser COMMAND parser_test)
 endif(HTTPXX_PARSER_BUILD_TESTS)
 
 

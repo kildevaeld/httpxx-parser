@@ -9,17 +9,17 @@ static const char *SIMPLE_GET_REQUEST = "HTTP/1.1 200 OK\r\n\r\n";
 
 TEST_CASE("Parse request") {
 
-  http_request::Parser parser;
+  httpxx_parser::Parser parser;
 
   auto i = parser.execute(SIMPLE_GET_REQUEST);
 
   REQUIRE(i == std::strlen(SIMPLE_GET_REQUEST));
-  REQUIRE(parser.state() == http_request::Parser::HeadersComplete);
+  REQUIRE(parser.state() == httpxx_parser::Parser::HeadersComplete);
 
   i = parser.execute();
 
   REQUIRE(i == 0);
-  REQUIRE(parser.state() == http_request::Parser::MessageComplete);
+  REQUIRE(parser.state() == httpxx_parser::Parser::MessageComplete);
 }
 
 static const char *GET_REQUEST = "HTTP/1.1 200 OK\r\n"
@@ -28,31 +28,31 @@ static const char *GET_REQUEST = "HTTP/1.1 200 OK\r\n"
 
 TEST_CASE("parser events") {
 
-  http_request::Parser parser;
+  httpxx_parser::Parser parser;
 
   bool headerCalled = false;
   bool bodyCalled = false;
   bool endCalled = false;
 
-  parser.once<http_request::HeaderEvent>(
+  parser.once<httpxx_parser::HeaderEvent>(
       [&headerCalled](const auto &e, auto &p) {
         REQUIRE(p.status() == 200);
         REQUIRE(e.header.at("content-length") == "13");
         headerCalled = true;
       });
 
-  parser.once<http_request::DataEvent>([&bodyCalled](const auto &e, auto &p) {
+  parser.once<httpxx_parser::DataEvent>([&bodyCalled](const auto &e, auto &p) {
     REQUIRE(e.data == "Hello, World!");
     bodyCalled = true;
   });
 
-  parser.once<http_request::EndEvent>(
+  parser.once<httpxx_parser::EndEvent>(
       [&endCalled](const auto &e, auto &) { endCalled = true; });
 
   auto i = parser.execute(GET_REQUEST);
 
   REQUIRE(i == std::strlen(GET_REQUEST));
-  REQUIRE(parser.state() == http_request::Parser::MessageComplete);
+  REQUIRE(parser.state() == httpxx_parser::Parser::MessageComplete);
 
   REQUIRE(headerCalled == true);
   REQUIRE(bodyCalled == true);
