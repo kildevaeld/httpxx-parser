@@ -36,7 +36,9 @@ public:
     MessageComplete
   };
 
-  Parser();
+  enum Type { HTTPRequest, HTTPResponse };
+
+  Parser(Type type = HTTPRequest);
   ~Parser();
   Parser(const Parser &other) = delete;
 
@@ -46,6 +48,7 @@ public:
   uint16_t status() const;
 
   State state() const;
+  void reset();
 
 private:
   friend class internal::ParserPrivate;

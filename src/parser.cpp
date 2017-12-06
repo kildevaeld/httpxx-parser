@@ -10,8 +10,8 @@ namespace internal {
 class ParserPrivate {
 
 public:
-  ParserPrivate(Parser *p) : q(p) {
-    http_parser_init(&parser, HTTP_RESPONSE);
+  ParserPrivate(Parser *p, Parser::Type type) : q(p) {
+    http_parser_init(&parser, (http_parser_type)type);
     http_parser_settings_init(&settings);
 
     parser.data = this;
@@ -22,6 +22,8 @@ public:
     settings.on_header_value = on_header_value;
     settings.on_headers_complete = on_headers_complete;
     settings.on_body = on_body;
+    settings.on_chunk_header = on_chunk_header;
+    settings.on_chunk_complete = on_chunk_complete;
   }
 
   Parser *q;
@@ -42,6 +44,8 @@ private:
   static int on_headers_complete(http_parser *);
 
   static int on_body(http_parser *, const char *, size_t);
+  static int on_chunk_header(http_parser *);
+  static int on_chunk_complete(http_parser *);
 };
 
 int ParserPrivate::on_message_begin(http_parser *parser) {
@@ -76,9 +80,7 @@ int ParserPrivate::on_header_value(http_parser *parser, const char *data,
 int ParserPrivate::on_headers_complete(http_parser *parser) {
   auto p = reinterpret_cast<ParserPrivate *>(parser->data);
   p->state = Parser::HeadersComplete;
-
   p->q->publish(HeaderEvent(std::move(p->header)));
-
   return 0;
 }
 
@@ -88,20 +90,29 @@ int ParserPrivate::on_body(http_parser *parser, const char *data, size_t size) {
   return 0;
 }
 
+int ParserPrivate::on_chunk_header(http_parser *) { return 0; }
+
+int ParserPrivate::on_chunk_complete(http_parser *) { return 0; }
+
 } // namespace internal
 
-Parser::Parser() : d(new internal::ParserPrivate(this)) {}
+Parser::Parser(Parser::Type type)
+    : d(new internal::ParserPrivate(this, type)) {}
 Parser::~Parser() {}
 
 int Parser::execute(const std::string &data) {
-  auto i =
-      http_parser_execute(&d->parser, &d->settings, data.data(), data.size());
-  return i;
+  return http_parser_execute(&d->parser, &d->settings, data.data(),
+                             data.size());
 }
 
 const Header &Parser::header() const { return d->header; }
 uint16_t Parser::status() const { return d->parser.status_code; }
 
 Parser::State Parser::state() const { return d->state; }
+
+void Parser::reset() {
+  d->header.clear();
+  d->state = Initial;
+}
 
 } // namespace httpxx_parser
