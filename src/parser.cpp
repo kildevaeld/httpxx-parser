@@ -3,6 +3,8 @@
 #include <httpxx-parser/parser.hpp>
 #include <string>
 
+#include <iostream>
+
 namespace httpxx_parser {
 
 namespace internal {
@@ -90,9 +92,16 @@ int ParserPrivate::on_body(http_parser *parser, const char *data, size_t size) {
   return 0;
 }
 
-int ParserPrivate::on_chunk_header(http_parser *) { return 0; }
+int ParserPrivate::on_chunk_header(http_parser *p) {
+  // std::cout << "on chunked header " << p->content_length << std::endl;
+  return 0;
+}
 
-int ParserPrivate::on_chunk_complete(http_parser *) { return 0; }
+int ParserPrivate::on_chunk_complete(http_parser *p) {
+  // std::cout << "on chunked header complete" << p->content_length <<
+  // std::endl;
+  return 0;
+}
 
 } // namespace internal
 

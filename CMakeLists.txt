@@ -12,6 +12,7 @@ include_directories(include)
 add_subdirectory(src)
 
 if(HTTPXX_PARSER_BUILD_TESTS)
+    enable_testing()
     add_subdirectory(test)
 endif(HTTPXX_PARSER_BUILD_TESTS)
 
