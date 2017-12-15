@@ -13,6 +13,7 @@ class ParserPrivate;
 
 struct HeaderEvent {
   HeaderEvent(Header &&h) : header(std::move(h)) {}
+  HeaderEvent(const Header &h) : header(h) {}
   Header header;
 };
 

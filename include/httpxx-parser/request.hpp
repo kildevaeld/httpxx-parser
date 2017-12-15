@@ -17,11 +17,13 @@ class Request {
 
 public:
   Request(Method method = Get);
+  Request(Request &&other);
   ~Request();
   Request(const Request &) = delete;
 
   Request &set_url(const URL &url);
   Request &set_url(const URL &&url);
+  URL url() const;
 
   Request &set_method(Method method);
   Method method() const;

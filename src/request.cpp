@@ -24,6 +24,8 @@ Request::Request(Method method) : d(new internal::RequestPrivate()) {
   d->method = method;
 }
 
+Request::Request(Request &&other) : d(std::move(other.d)) {}
+
 Request::~Request() {}
 
 Request &Request::set_url(const URL &url) {
@@ -34,6 +36,8 @@ Request &Request::set_url(const URL &&url) {
   d->url = std::move(url);
   return *this;
 }
+
+URL Request::url() const { return d->url; }
 
 Request &Request::set_method(Method method) {
   d->method = method;
@@ -110,10 +114,17 @@ std::ostream &operator<<(std::ostream &s, const Request &r) {
     s << "Host: " << r.d->url.host() << "\r\n";
   }
 
+  auto m = r.d->method;
+  if (r.d->body.size() > 0 && (m == Post || m == Put || m == Patch)) {
+    if (r.d->header.find("Content-Length") == r.d->header.end()) {
+      s << "Content-Length: " << r.d->body.size() << "\r\n";
+    }
+  }
+
   s << "\r\n";
 
   if (r.d->body.size() > 0) {
-    auto m = r.d->method;
+
     if (m == Post || m == Put || m == Patch) {
       s << r.d->body;
     }
