@@ -82,7 +82,7 @@ int ParserPrivate::on_header_value(http_parser *parser, const char *data,
 int ParserPrivate::on_headers_complete(http_parser *parser) {
   auto p = reinterpret_cast<ParserPrivate *>(parser->data);
   p->state = Parser::HeadersComplete;
-  p->q->publish(HeaderEvent(p->header));
+  p->q->publish(HeaderEvent(p->header, parser->status_code));
   return 0;
 }
 
