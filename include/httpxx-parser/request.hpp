@@ -16,13 +16,13 @@ class RequestPrivate;
 class Request {
 
 public:
-  Request(Method method = Get);
+  Request(Method method = Get, const URL &url = URL());
   Request(Request &&other);
   ~Request();
   Request(const Request &) = delete;
 
   Request &set_url(const URL &url);
-  Request &set_url(const URL &&url);
+  Request &set_url(URL &&url);
   URL url() const;
 
   Request &set_method(Method method);

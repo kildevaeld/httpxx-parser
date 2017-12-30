@@ -20,8 +20,10 @@ public:
 };
 } // namespace internal
 
-Request::Request(Method method) : d(new internal::RequestPrivate()) {
+Request::Request(Method method, const URL &url)
+    : d(new internal::RequestPrivate()) {
   d->method = method;
+  d->url = url;
 }
 
 Request::Request(Request &&other) : d(std::move(other.d)) {}
@@ -32,7 +34,7 @@ Request &Request::set_url(const URL &url) {
   d->url = url;
   return *this;
 }
-Request &Request::set_url(const URL &&url) {
+Request &Request::set_url(URL &&url) {
   d->url = std::move(url);
   return *this;
 }
