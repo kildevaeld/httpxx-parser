@@ -32,6 +32,8 @@ public:
 
   bool valid() const;
 
+  std::string str() const;
+
   friend std::ostream &operator<<(std::ostream &os, const URL &dt);
 
 private:
@@ -43,4 +45,4 @@ private:
   std::string m_fragment;
   bool m_valid = false;
 };
-}
+} // namespace httpxx_parser

@@ -1,6 +1,7 @@
 #include <http_parser.h>
 #include <httpxx-parser/url.hpp>
 #include <ostream>
+#include <sstream>
 
 namespace httpxx_parser {
 
@@ -87,6 +88,23 @@ std::ostream &operator<<(std::ostream &os, const URL &u) {
   os << ")";
 
   return os;
+}
+
+std::string URL::str() const {
+  std::stringstream os;
+  if (!valid()) {
+    return os.str();
+  }
+  os << protocol() << "://" << host() << ":" << port() << path();
+
+  if (query().size() > 0) {
+    os << "?" << query();
+  }
+  if (fragment().size() > 0) {
+    os << "#" << fragment();
+  }
+
+  return os.str();
 }
 
 } // namespace httpxx_parser
