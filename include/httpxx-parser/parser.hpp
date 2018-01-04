@@ -38,9 +38,9 @@ public:
     MessageComplete
   };
 
-  enum Type { HTTPRequest, HTTPResponse };
+  enum Type { Request, Response };
 
-  Parser(Type type = HTTPRequest);
+  Parser(Type type = Response);
   ~Parser();
   Parser(const Parser &other) = delete;
 

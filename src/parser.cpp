@@ -13,7 +13,7 @@ class ParserPrivate {
 
 public:
   ParserPrivate(Parser *p, Parser::Type type) : q(p) {
-    http_parser_init(&parser, (http_parser_type)type);
+    http_parser_init(&parser, static_cast<http_parser_type>(type));
     http_parser_settings_init(&settings);
 
     parser.data = this;
@@ -75,7 +75,6 @@ int ParserPrivate::on_header_value(http_parser *parser, const char *data,
                                    size_t size) {
   auto p = reinterpret_cast<ParserPrivate *>(parser->data);
   p->header[std::move(p->current_field)] = std::string(data, size);
-
   return 0;
 }
 
@@ -114,6 +113,7 @@ Parser::State Parser::state() const { return d->state; }
 
 void Parser::reset() {
   d->header.clear();
+  d->current_field.clear();
   d->state = Initial;
 }
 

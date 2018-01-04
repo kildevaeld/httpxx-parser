@@ -9,7 +9,7 @@ static const char *SIMPLE_GET_REQUEST = "HTTP/1.1 200 OK\r\n\r\n";
 
 TEST_CASE("Parse request") {
 
-  httpxx_parser::Parser parser(httpxx_parser::Parser::HTTPResponse);
+  httpxx_parser::Parser parser(httpxx_parser::Parser::Response);
 
   auto i = parser.execute(SIMPLE_GET_REQUEST);
 
@@ -28,7 +28,7 @@ static const char *GET_REQUEST = "HTTP/1.1 200 OK\r\n"
 
 TEST_CASE("parser events") {
 
-  httpxx_parser::Parser parser(httpxx_parser::Parser::HTTPResponse);
+  httpxx_parser::Parser parser(httpxx_parser::Parser::Request);
 
   bool headerCalled = false;
   bool bodyCalled = false;
@@ -69,7 +69,7 @@ static const char *GET_REQUEST_CHUNKED = "HTTP/1.1 200 OK\r\n"
 
 TEST_CASE("Chunked request") {
 
-  httpxx_parser::Parser parser(httpxx_parser::Parser::HTTPResponse);
+  httpxx_parser::Parser parser(httpxx_parser::Parser::Response);
 
   int count = 0;
   std::stringstream ss;
