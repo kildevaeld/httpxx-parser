@@ -14,6 +14,8 @@ enum Method {
   Delete,
 };
 
+constexpr const char *method_name(Method method);
+
 struct CaseInsensitiveCompare {
   bool operator()(const std::string &a, const std::string &b) const noexcept;
 };

@@ -4,6 +4,8 @@ set(CMAKE_CXX_STANDARD 14)
 
 set(PROJECT_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 
+set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall")
+
 option(HTTPXX_PARSER_BUILD_TESTS "build and run tests" off)
 
 include_directories(vendor/http-parser)
