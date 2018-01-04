@@ -92,6 +92,12 @@ Request &Request::set_body(std::string &&body) {
   d->body = std::move(body);
   return *this;
 }
+
+Request &Request::set_body(const char *data, size_t size) {
+  d->body.append(data, size);
+  return *this;
+}
+
 std::string Request::body() const { return d->body; }
 
 std::string Request::str() const {
@@ -126,7 +132,6 @@ std::ostream &operator<<(std::ostream &s, const Request &r) {
   s << "\r\n";
 
   if (r.d->body.size() > 0) {
-
     if (m == Post || m == Put || m == Patch) {
       s << r.d->body;
     }

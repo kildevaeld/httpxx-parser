@@ -35,9 +35,10 @@ public:
 
   Request &set_body(const std::string &body);
   Request &set_body(std::string &&body);
+  Request &set_body(const char *data, size_t size);
   std::string body() const;
 
-  bool valid() const;
+    bool valid() const;
   operator bool() const;
 
   std::string str() const;
