@@ -5,6 +5,18 @@
 #include <httpxx-parser/request.hpp>
 #include <sstream>
 
+static bool iequals(const std::string &a, const std::string &b) {
+  unsigned int sz = a.size();
+  if (b.size() != sz)
+    return false;
+  for (unsigned int i = 0; i < sz; ++i)
+    if (std::tolower(a[i]) != std::tolower(b[i]))
+      return false;
+  return true;
+}
+
+static const char *const kCRLF = "\r\n";
+
 namespace httpxx_parser {
 
 namespace internal {
@@ -63,25 +75,6 @@ Request &Request::set_header(const std::string &field,
   return *this;
 }
 
-static inline std::string method_to_str(Method method) {
-  switch (method) {
-  case Post:
-    return "POST";
-  case Get:
-    return "GET";
-  case Put:
-    return "PUT";
-  case Patch:
-    return "PATCH";
-  case Option:
-    return "OPTION";
-  case Delete:
-    return "DELETE";
-  case Head:
-    return "HEAD";
-  }
-}
-
 Header Request::header() const { return d->header; }
 
 Request &Request::set_body(const std::string &body) {
@@ -111,25 +104,30 @@ bool Request::valid() const { return d->url.valid(); }
 Request::operator bool() const { return valid(); }
 
 std::ostream &operator<<(std::ostream &s, const Request &r) {
-  s << method_to_str(r.d->method) << " " << r.d->url.path() << " HTTP/1.1\r\n";
+  s << method_name(r.d->method) << " " << r.d->url.path() << " HTTP/1.1"
+    << kCRLF;
+
+  bool has_host, has_cl = false;
 
   for (const auto &h : r.d->header) {
-    s << h.first << ": " << h.second << "\r\n";
+    if (iequals(h.first, "content-length"))
+      has_cl = true;
+    else if (iequals(h.first, "host"))
+      has_host = true;
+    s << h.first << ": " << h.second << kCRLF;
   }
 
-  if (r.d->header.find("Host") == r.d->header.end() &&
-      r.d->url.host().size() > 0) {
-    s << "Host: " << r.d->url.host() << "\r\n";
+  if (!has_host && r.d->url.host().size() > 0) {
+    s << "Host: " << r.d->url.host() << kCRLF;
   }
 
   auto m = r.d->method;
-  if (r.d->body.size() > 0 && (m == Post || m == Put || m == Patch)) {
-    if (r.d->header.find("Content-Length") == r.d->header.end()) {
-      s << "Content-Length: " << r.d->body.size() << "\r\n";
-    }
+  if ((r.d->body.size() > 0 && (m == Post || m == Put || m == Patch)) &&
+      !has_cl) {
+    s << "Content-Length: " << r.d->body.size() << kCRLF;
   }
 
-  s << "\r\n";
+  s << kCRLF;
 
   if (r.d->body.size() > 0) {
     if (m == Post || m == Put || m == Patch) {

@@ -28,7 +28,7 @@ static const char *GET_REQUEST = "HTTP/1.1 200 OK\r\n"
 
 TEST_CASE("parser events") {
 
-  httpxx_parser::Parser parser(httpxx_parser::Parser::Request);
+  httpxx_parser::Parser parser(httpxx_parser::Parser::Response);
 
   bool headerCalled = false;
   bool bodyCalled = false;

@@ -2,7 +2,7 @@
 
 namespace httpxx_parser {
 
-constexpr const char *method_name(Method method) {
+const char *method_name(Method method) {
   switch (method) {
   case Post:
     return "POST";
