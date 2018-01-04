@@ -18,8 +18,10 @@ class Request {
 public:
   Request(Method method = Get, const URL &url = URL());
   Request(Request &&other);
-  ~Request();
   Request(const Request &) = delete;
+  ~Request();
+
+  Request &operator=(const Request &) = delete;
 
   Request &set_url(const URL &url);
   Request &set_url(URL &&url);
@@ -38,7 +40,7 @@ public:
   Request &set_body(const char *data, size_t size);
   std::string body() const;
 
-    bool valid() const;
+  bool valid() const;
   operator bool() const;
 
   std::string str() const;
