@@ -33,6 +33,13 @@ public:
   Request &set_header(const Header &header);
   Request &set_header(Header &&header);
   Request &set_header(const std::string &field, const std::string &value);
+
+  template <typename Integer,
+            typename = std::enable_if_t<std::is_integral<Integer>::value>>
+  Request &set_header(const std::string &field, Integer i) {
+    std::string v = std::to_string(i);
+    return set_header(field, v);
+  }
   Header header() const;
 
   Request &set_body(const std::string &body);

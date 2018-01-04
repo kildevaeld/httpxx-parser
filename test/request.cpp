@@ -14,12 +14,12 @@ TEST_CASE("request builder") {
 
   Request req(Post);
 
-  req.set_url("rapper.com/testmig")
+  req.set_url("http://rapper.com/testmig")
       .set_header("Content-Type", "plain/text")
-      .set_header("Content-Length", "13")
+      .set_header("Content-Length", 13)
       .set_body("Hello, World!");
 
-  REQUIRE_FALSE(req);
+  REQUIRE(req);
 
   std::cout << req << std::endl;
 }
