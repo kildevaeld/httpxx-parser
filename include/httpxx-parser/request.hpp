@@ -16,7 +16,7 @@ class RequestPrivate;
 class Request {
 
 public:
-  Request(Method method = Get, const URL &url = URL());
+   Request(Method method = Get, const URL &url = URL());
   Request(Request &&other);
   Request(const Request &) = delete;
   ~Request();
